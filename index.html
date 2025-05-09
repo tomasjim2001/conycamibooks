@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Cony & Cami</title>
+  <style>
+    :root {
+      --main-bg: #f9f9f9;
+      --text-color: #0a0a0a;
+      --accent: #007BFF;
+    }
+
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background: var(--main-bg);
+      color: var(--text-color);
+    }
+
+    header {
+      background: #c08989;
+      color: white;
+      padding: 1rem;
+      text-align: center;
+    }
+
+    .container {
+      max-width: 960px;
+      margin: 2rem auto;
+      padding: 0 1rem;
+    }
+
+    .filters {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem;
+      margin-bottom: 2rem;
+    }
+
+    .filters input,
+    .filters select {
+      flex: 1 1 200px;
+      padding: 0.6rem;
+      font-size: 1rem;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+    }
+
+    .book {
+      background: white;
+      padding: 1rem;
+      margin-bottom: 1rem;
+      border-radius: 8px;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+      display: flex;
+      flex-direction: row;
+      gap: 1rem;
+      align-items: flex-start;
+    }
+
+    .book img {
+      width: 90px;
+      height: auto;
+      border-radius: 4px;
+      object-fit: cover;
+      flex-shrink: 0;
+    }
+
+    .book-content {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+
+    .book h3 {
+      margin: 0;
+      color: var(--accent);
+      cursor: pointer;
+      text-decoration: underline;
+    }
+
+    .book .price {
+      font-weight: bold;
+      color: var(--accent);
+    }
+
+    .tag {
+      display: inline-block;
+      padding: 0.3rem 0.6rem;
+      font-size: 0.8rem;
+      border-radius: 4px;
+      width: fit-content;
+    }
+
+    .tag.nuevo {
+      background-color: #c8e6c9;
+      color: #2e7d32;
+    }
+
+    .tag.abierto {
+      background-color: #ffe0b2;
+      color: #ef6c00;
+    }
+
+    .book-detail {
+      display: none;
+      margin-top: 1rem;
+    }
+
+    .book-detail img {
+      width: 100%;
+      max-width: 300px;
+      margin-top: 0.5rem;
+    }
+
+    footer {
+      background: #c08989;
+      color: white;
+      text-align: center;
+      padding: 1.5rem;
+      margin-top: 3rem;
+    }
+
+    .contacto {
+      text-align: center;
+      margin: 3rem auto;
+    }
+
+    .contacto h2 {
+      margin-bottom: 0.5rem;
+    }
+
+    .contacto p {
+      margin: 0.2rem 0;
+    }
+
+    @media (max-width: 600px) {
+      .filters {
+        flex-direction: column;
+      }
+
+      .book {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+      }
+
+      .book-content {
+        align-items: center;
+      }
+
+      header h1 {
+        font-size: 1.5rem;
+      }
+
+      .book {
+        font-size: 0.95rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Cony & Cami Books</h1>
+    <p>Encuentra libros nuevos, cerrados o abiertos a buen precio</p>
+  </header>
+
+  <div class="container">
+    <div class="filters">
+      <input type="text" id="search" placeholder="Buscar libro..." />
+      <select id="filter">
+        <option value="todos">Todos</option>
+        <option value="nuevo">Nuevos</option>
+        <option value="abierto">Abiertos</option>
+      </select>
+    </div>
+    <div id="book-list"></div>
+  </div>
+
+  <div class="contacto" id="contacto">
+    <h2>Contacto</h2>
+    <p>Email: conycamibooks@gmail.com</p>
+    <p>Instagram: <a href="https://instagram.com/conycamibooks" target="_blank">@conycamibooks</a></p>
+  </div>
+
+  <footer>
+    <p>&copy; 2025 Cony & Cami Books</p>
+    <p><a href="#contacto" style="color: white; text-decoration: underline;">Contacto</a></p>
+  </footer>
+
+  <script>
+    const libros = [
+    {
+        titulo: "Marfil Enfrentados- Mercedes Ron",
+        descripcion: "Sebastian Moore llegó a mi vida para protegerla, pero nadie me advirtió que sentir algo por él estaba terminamente prohibido.",
+        precio: "17.000 CLP",
+        estado: "abierto",
+        imagen: "https://images.cdn1.buscalibre.com/fit-in/360x360/fd/4b/fd4bbef94759985f51a0122d315c4c9d.jpg",
+        imagenesExtra: [
+          "https://cdn.discordapp.com/attachments/1370191171846013088/1370192252390867025/marfildelante.jpg?ex=681e9a79&is=681d48f9&hm=ea93ff43b7666fbcd0c2252354d065d2efe113b03efe4b0e29b8dcc5da1a05c3&",
+          "https://media.discordapp.net/attachments/1370191171846013088/1370192265657454692/marfilatras.jpg?ex=681e9a7d&is=681d48fd&hm=d33acdaa1a3bbfb4fa57f06dd471a958859372e9ce33c75f8a4b7f61bdc412b7&=&format=webp&width=346&height=461"
+        ]
+      },
+      {
+        titulo: "Ébano Enfrentados - Mercedes Ron",
+        descripcion: "Sebastian Moore ha cumplido cada promesa que me hizo, pero cada vez que cierro los ojos, en mi mente solo oigo su voz.",
+        precio: "18.000 CLP",
+        estado: "nuevo - cerrado",
+        imagen: "https://images.cdn3.buscalibre.com/fit-in/360x360/88/73/8873a5537847886b5312a7c6b06c3c9a.jpg",
+        imagenesExtra: [
+          "https://media.discordapp.net/attachments/1370191171846013088/1370192185579933728/ebanoadelante.jpg?ex=681e9a69&is=681d48e9&hm=528a630fc5a4c443ac9316007258035e913b27147da808cf2172e439a8a8891e&=&format=webp&width=346&height=461",
+          "https://media.discordapp.net/attachments/1370191171846013088/1370192199626526802/ebanoatras.jpg?ex=681e9a6d&is=681d48ed&hm=95cdeb94d3b1c4b47cafc3a02940815c3e420e6155b4c980df7746048d834e81&=&format=webp&width=346&height=461"
+        ]
+      },
+      {
+        titulo: "A través de mi ventana - Ariana Godoy",
+        descripcion: "Ahora, Raquel tiene muy claro su objetivo: conseguir que Ares se enamore de ella...",
+        precio: "13.000 CLP",
+        estado: "nuevo - cerrado",
+        imagen: "https://www.antartica.cl/media/catalog/product/9/7/9789563841541_1.png",
+        imagenesExtra: ["https://media.discordapp.net/attachments/1370191171846013088/1370192312558420008/ventanaadelante.jpg?ex=681e9a88&is=681d4908&hm=dffa4084ffa924e2025b33d15dc2ad4e3582e5dd2326d99cf1647172c81c0451&=&format=webp&width=346&height=461",
+        "https://cdn.discordapp.com/attachments/1370191171846013088/1370192324629495828/ventanaatras.jpg?ex=681e9a8b&is=681d490b&hm=dd2a9e8bb5d034b42837f340939d764dd81262aa128552f89895350c050aa6fe&format=webp&width=346&height=461"
+        ]
+      },
+      {
+        titulo: "Seremos Recuerdos - Elísabet Benavent",
+        descripcion: "Macarena ha conseguido poner su vida y su trabajo en orden. Macarena cree que Candela es la ayudante que necesita. Macarena empieza de nuevo. Leo sigue presente... como amigo",
+        precio: "12.000 CLP",
+        estado: "nuevo",
+        imagen: "https://images.cdn2.buscalibre.com/fit-in/360x360/40/20/402006b1cee42c54d02b00f023f1bbb4.jpg",
+        imagenesExtra: [
+          "https://media.discordapp.net/attachments/1370191171846013088/1370192275375784117/seremosrecuerdosadelante.jpg?ex=681e9a7f&is=681d48ff&hm=9310cc0d14772c49d625c9b071f17f5d74f6ec07f83d9f13034cef7b8543cfe8&=&format=webp&width=346&height=461",
+          "https://media.discordapp.net/attachments/1370191171846013088/1370192300533223506/seremosrecuerdosatras.jpg?ex=681e9a85&is=681d4905&hm=8036e6ff6a0b0e9b19003f00d39aed637d728a63ef2e60e152ac4b4a831801a8&=&format=webp&width=346&height=461"
+        ]
+      },
+      {
+        titulo: "Culpa Tuya - Mercedes Ron",
+        descripcion: "Cuando Noah se enamoró de Nick sabía que su relación no iba a ser fácil: son polos opuestos, fuego y electricidad, y cuando están juntos saltan chispas... en todos los sentidos",
+        precio: "14.000 CLP",
+        estado: "abierto",
+        imagen: "https://images.cdn2.buscalibre.com/fit-in/360x360/6d/cf/6dcf9a34671fff13d8e92d14c6eadb65.jpg",
+        imagenesExtra: [
+          "https://media.discordapp.net/attachments/1370191171846013088/1370192107209490472/culpatuyaadelante.jpg?ex=681e9a57&is=681d48d7&hm=c2ad956fc41026575de45d9f7ec6367d843058bc9e5d7e08380808b48a62f44f&=&format=webp&width=346&height=461",
+          "https://media.discordapp.net/attachments/1370191171846013088/1370192117141340200/culpatuyaatras.jpg?ex=681e9a59&is=681d48d9&hm=633d77fc902247040022666a3209c2cb70fe19b004eee576f093eb0a95551ab7&=&format=webp&width=346&height=461"
+        ]
+      },
+      {
+        titulo: "Anhelo - Tracy Wolff",
+        descripcion: "Una chica capaz de vencer al miedo. Un vampiro marcado por su oscuro pasado. Dos seres solitarios cuyos caminos se cruzan en el lugar más frío de la TIerra.",
+        precio: "15.000 CLP",
+        estado: "nuevo",
+        imagen: "https://images.cdn2.buscalibre.com/fit-in/360x360/da/fc/dafc4fefa5316dbb969a4735e0335018.jpg",
+        imagenesExtra: [
+          "https://media.discordapp.net/attachments/1370191171846013088/1370192072921059358/anheloadelante.jpg?ex=681e9a4f&is=681d48cf&hm=8741e737d69689cf36670c0cc3f0d4a628e40905b6d0d2398e05b598a21bb8a7&=&format=webp&width=346&height=461",
+          "https://media.discordapp.net/attachments/1370191171846013088/1370192094672584734/anheloatras.jpg?ex=681e9a54&is=681d48d4&hm=7c73e407d497a0a809e3275f9e77eacf9613b09f103a9ab16f28430bed3080c6&=&format=webp&width=346&height=461"
+        ]
+      },
+      {
+        titulo: "Dímelo con besos - Mercedes Ron",
+        descripcion: "Kamila Hamilton debe decidir entre los dos hermanos Di Bianco: Thiago o Taylor,,, Taylor o Thiago. Escoger uno significa renunciar al otro, pero ¿Cómo puede dejar atrás una parte de sí misma?",
+        precio: "16.000 CLP",
+        estado: "nuevo",
+        imagen: "https://www.penguinlibros.com/cl/1780465-large_default/dimelo-con-besos-dimelo-3.webp",
+        imagenesExtra: [
+          "https://media.discordapp.net/attachments/1370191171846013088/1370192128772407398/dimeloconbesosadelante.jpg?ex=681e9a5c&is=681d48dc&hm=9a50f30f8f18783ddb054a60c9af107494fa223aa45fc59a89f6528aac33a871&=&format=webp&width=346&height=461",
+          "https://media.discordapp.net/attachments/1370191171846013088/1370192151501340836/dimeloconbesosatras.jpg?ex=681e9a61&is=681d48e1&hm=2598a223bd4f86dabd6f1907200eadaa3a99bb21824a8d522eda2205cab76a85&=&format=webp&width=346&height=461"
+        ]
+      },
+      {
+        titulo: "Dímelo en secreto - Mercedes Ron",
+        descripcion: "Kamila Hamilton vuelve a tener a sus dos mejores amigos en su vida. El problema es que Taylo y Thiago Di Bianco ya no son simple amigos. Ahora son mucho más.",
+        precio: "18.000 CLP",
+        estado: "nuevo",
+        imagen: "https://www.antartica.cl/media/catalog/product/9/7/9789566026648_1.png?quality=80&bg-color=255,255,255&fit=bounds&height=700&width=700&canvas=700:700&format=jpeg",
+        imagenesExtra: [
+          "https://media.discordapp.net/attachments/1370191171846013088/1370192161483784272/dimeloensecretoadelante.jpg?ex=681e9a64&is=681d48e4&hm=787756c58f198337706531c8f36992f490dd742a44696e85b8fa012d57313bd7&=&format=webp&width=346&height=461",
+          "https://media.discordapp.net/attachments/1370191171846013088/1370192177128411166/dimeloensecretoatras.jpg?ex=681e9a67&is=681d48e7&hm=6709e8094b7fa473e1a8248a4468e273d759c580311e1ed31dcbe37e66662e4f&=&format=webp&width=346&height=461"
+        ]
+      },
+      {
+        titulo: "Heist ¿Cazar o ser cazado? - Ariana Godoy",
+        descripcion: "¿Quién es el Monstruo? ¿Podrá el cazador ser cazado?",
+        precio: "16.000 CLP",
+        estado: "abierto",
+        imagen: "https://images.cdn1.buscalibre.com/fit-in/360x360/4a/1a/4a1aebc1dfb6ae55d7a7672124df5a2b.jpg",
+        imagenesExtra: [
+          "https://media.discordapp.net/attachments/1370191171846013088/1370192224456933386/heistadelante.jpg?ex=681e9a73&is=681d48f3&hm=8b9e736452ecac64def6be8562a2a13815ed9ed88e4a50c6b663d743a6d86c2f&=&format=webp&width=346&height=461",
+          "https://media.discordapp.net/attachments/1370191171846013088/1370192235425038346/heistatras.jpg?ex=681e9a75&is=681d48f5&hm=c8e222928b90004aab8f595d243cfc50ce0482665ac0c774b13979271b51606e&=&format=webp&width=346&height=461"
+        ]
+      },
+    ];
+
+    const container = document.getElementById("book-list");
+    const searchInput = document.getElementById("search");
+    const filterSelect = document.getElementById("filter");
+
+    function renderBooks() {
+      const searchTerm = searchInput.value.toLowerCase();
+      const filterValue = filterSelect.value;
+      container.innerHTML = "";
+
+      const filteredBooks = libros.filter(libro => {
+        const matchesSearch =
+          libro.titulo.toLowerCase().includes(searchTerm) ||
+          libro.descripcion.toLowerCase().includes(searchTerm);
+        const matchesFilter =
+          filterValue === "todos" ||
+          libro.estado.toLowerCase().includes(filterValue);
+        return matchesSearch && matchesFilter;
+      });
+
+      if (filteredBooks.length === 0) {
+        container.innerHTML = "<p>No se encontraron libros.</p>";
+        return;
+      }
+
+      filteredBooks.forEach((libro, index) => {
+        const bookDiv = document.createElement("div");
+        bookDiv.className = "book";
+
+        const extraImgs = libro.imagenesExtra.map(src => `<img src="${src}" alt="Imagen extra">`).join("");
+
+        bookDiv.innerHTML = `
+          <img src="${libro.imagen}" alt="Portada de ${libro.titulo}">
+          <div class="book-content">
+            <h3 onclick="toggleDetails(${index})">${libro.titulo}</h3>
+            <p>${libro.descripcion}</p>
+            <span class="price">${libro.precio}</span>
+            <span class="tag ${libro.estado.includes('nuevo') ? 'nuevo' : 'abierto'}">${libro.estado}</span>
+            <div class="book-detail" id="detail-${index}">
+              ${extraImgs || "<p>No hay imágenes adicionales.</p>"}
+            </div>
+          </div>
+        `;
+
+        container.appendChild(bookDiv);
+      });
+    }
+
+    function toggleDetails(index) {
+      const detail = document.getElementById(`detail-${index}`);
+      detail.style.display = detail.style.display === "block" ? "none" : "block";
+    }
+
+    searchInput.addEventListener("input", renderBooks);
+    filterSelect.addEventListener("change", renderBooks);
+
+    renderBooks();
+  </script>
+</body>
+</html>
